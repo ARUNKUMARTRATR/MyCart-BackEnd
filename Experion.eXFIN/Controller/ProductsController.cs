@@ -25,7 +25,14 @@ namespace Experion.MyCart.Controller
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Products>>> GetProducts()
         {
-            return await _context.Products.Where(x => x.IsDeleted != true).ToListAsync();
+            try
+            {
+                return await _context.Products.Where(x => x.IsDeleted != true).ToListAsync();
+            }
+            catch(DbUpdateConcurrencyException)
+            {
+                throw;
+            }
         }
 
         // GET: api/Products/5
@@ -42,39 +49,37 @@ namespace Experion.MyCart.Controller
             return products;
         }
 
+        // GET: api/Products/----updating product
         [HttpPut]
         public async Task<ActionResult<Products>> PutProducts([FromBody] ProductModel productData)
         {
             var id = _context.Products.Where(x => x.ProductId == productData.ProductId).Select(x => x.Id).FirstOrDefault();
-            var catid = _context.Products.Where(x => x.ProductId == productData.ProductId).Select(x => x.CatogoryId).FirstOrDefault();
-
             var product = await _context.Products.FindAsync(id);
-
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-
-            product.ProductName = productData.ProductName;
-            product.ProductId = productData.ProductId;
-            product.IsDeleted = false;
-            product.PhotoUrl = productData.PhotoUrl;
-            product.Price = productData.Price;
-            product.LaunchDate = productData.LaunchDate;
-            product.IsAvailable = productData.IsAvailable;
-            product.CatogoryId = catid;
-            product.Description = productData.Description;
-
-
 
             try
             {
+
+                if (product == null)
+                {
+                    return NotFound();
+                }
+
+                product.ProductName = productData.ProductName;
+                product.ProductId = productData.ProductId;
+                product.IsDeleted = false;
+                product.PhotoUrl = productData.PhotoUrl;
+                product.Price = productData.Price;
+                product.LaunchDate = productData.LaunchDate;
+                product.IsAvailable = productData.IsAvailable;
+                product.CatogoryId = productData.CategoryId;
+                product.Description = productData.Description;
+
                 _context.Products.Update(product);
                 await _context.SaveChangesAsync();
                 return product;
 
             }
+
             catch (DbUpdateConcurrencyException)
             {
                 if (!ProductsExists(id))
@@ -89,78 +94,70 @@ namespace Experion.MyCart.Controller
 
         }
 
+        // GET: api/Products/----adding product
         [HttpPost]
         public async Task<ActionResult<Products>> PostProducts([FromBody] ProductModel productsData)
         {
 
-            var productNew = new Products();
             var pName = _context.Products.Where(x => x.ProductId == productsData.ProductId).Select(x => x.ProductName).FirstOrDefault();
-            if (pName == null)
+
+            
+            try
             {
-                var temp = _context.Catogory.Where(x => x.Catogories == productsData.CatogoryName).FirstOrDefault();
-                if (temp == null)
+                if (pName != null)
                 {
-                    var cat = new Catogory { Catogories = productsData.CatogoryName.ToLower() };
-                    _context.Catogory.Add(cat);
-                    await _context.SaveChangesAsync();
-                    var catid = _context.Catogory.Where(x => x.Catogories == productsData.CatogoryName.ToLower()).Select(x => x.CatogoryId).FirstOrDefault();
-
-                    productNew.ProductName = productsData.ProductName;
-                    productNew.ProductId = productsData.ProductId;
-                    productNew.Description = productsData.Description;
-                    productNew.Price = productsData.Price;
-                    productNew.LaunchDate = productsData.LaunchDate.ToString();
-                    productNew.PhotoUrl = productsData.PhotoUrl;
-                    productNew.IsAvailable = productsData.IsAvailable;
-                    productNew.IsDeleted = false;
-                    productNew.CatogoryId = catid;
-                    
-                    _context.Products.Add(productNew);
-                    await _context.SaveChangesAsync();
-                    return productNew;
-
-                }
-                else
-                {
-                    var catid = _context.Catogory.Where(x => x.Catogories == productsData.CatogoryName.ToLower()).Select(x => x.CatogoryId).FirstOrDefault();
-
-                    productNew.ProductName = productsData.ProductName;
-                    productNew.ProductId = productsData.ProductId;
-                    productNew.Description = productsData.Description;
-                    productNew.Price = productsData.Price;
-                    productNew.LaunchDate = productsData.LaunchDate.ToString();
-                    productNew.PhotoUrl = productsData.PhotoUrl;
-                    productNew.IsAvailable = productsData.IsAvailable;
-                    productNew.IsDeleted = false;
-                    productNew.CatogoryId = catid;
-                    
-                    _context.Products.Add(productNew);
-                    await _context.SaveChangesAsync();
-                    return productNew;
+                    return NotFound();
                 }
 
+                var productAdd = new Products
+                {
+                    ProductId = productsData.ProductId,
+                    ProductName = productsData.ProductName,
+                    Description = productsData.Description,
+                    Price = productsData.Price,
+                    LaunchDate = productsData.LaunchDate,
+                    PhotoUrl = productsData.PhotoUrl,
+                    IsAvailable = productsData.IsAvailable,
+                    IsDeleted = productsData.IsDeleted,
+                    CatogoryId = productsData.CategoryId
+                };
+
+                _context.Products.Add(productAdd);
+                await _context.SaveChangesAsync();
+                return productAdd;
+
             }
-            else
+            catch (DbUpdateConcurrencyException)
             {
-                return BadRequest();
+
+                throw;
             }
+
 
         }
 
+        // GET: api/Products/----delete product
         [HttpDelete("{productId}")]
         public async Task<ActionResult<Products>> DeleteProducts(string productId)
         {
-            var id = _context.Products.Where(x => x.ProductId == productId).Select(x => x.Id).FirstOrDefault();
-            var product = await _context.Products.FindAsync(id);
-            if (product == null)
+            try
             {
-                return NotFound();
-            }
-            product.IsDeleted = true;
-            _context.Products.Update(product);
-            await _context.SaveChangesAsync();
+                var id = _context.Products.Where(x => x.ProductId == productId).Select(x => x.Id).FirstOrDefault();
+                var product = await _context.Products.FindAsync(id);
+                if (product == null)
+                {
+                    return NotFound();
+                }
+                product.IsDeleted = true;
+                _context.Products.Update(product);
+                await _context.SaveChangesAsync();
 
-            return product;
+                return product;
+            }
+            catch(DbUpdateConcurrencyException)
+            {
+                throw;
+            }
         }
 
         private bool ProductsExists(int id)
