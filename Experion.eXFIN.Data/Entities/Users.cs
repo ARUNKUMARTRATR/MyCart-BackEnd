@@ -5,10 +5,7 @@ namespace Experion.MyCart.Data.Entities
 {
     public partial class Users
     {
-        public Users()
-        {
-            ProductCart = new HashSet<ProductCart>();
-        }
+       
 
         public int UserId { get; set; }
         public string FName { get; set; }
@@ -20,6 +17,5 @@ namespace Experion.MyCart.Data.Entities
         public string PhotoUrl { get; set; }
         public bool IsAdmin { get; set; }
 
-        public virtual ICollection<ProductCart> ProductCart { get; set; }
     }
 }

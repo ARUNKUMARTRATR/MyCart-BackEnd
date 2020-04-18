@@ -14,6 +14,6 @@ namespace Experion.MyCart.Data.Model
         public string PhotoUrl { get; set; }
         public bool IsAvailable { get; set; }
         public bool IsDeleted { get; set; }
-        public int CategoryId { get; set; }
+        public string CatogoryName { get; set; }
     }
 }

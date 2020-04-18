@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Experion.MyCart.Data.Entities;
 using Microsoft.AspNetCore.Cors;
 using Experion.MyCart.Data.Model;
+using System;
 
 namespace Experion.MyCart.Controller
 {
@@ -29,7 +30,7 @@ namespace Experion.MyCart.Controller
             {
                 return await _context.Products.Where(x => x.IsDeleted != true).ToListAsync();
             }
-            catch(DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException)
             {
                 throw;
             }
@@ -55,7 +56,7 @@ namespace Experion.MyCart.Controller
         {
             var id = _context.Products.Where(x => x.ProductId == productData.ProductId).Select(x => x.Id).FirstOrDefault();
             var product = await _context.Products.FindAsync(id);
-
+            var catId = _context.Catogory.Where(x => x.Catogories == productData.CatogoryName).Select(x => x.CatogoryId).FirstOrDefault();
             try
             {
 
@@ -71,7 +72,7 @@ namespace Experion.MyCart.Controller
                 product.Price = productData.Price;
                 product.LaunchDate = productData.LaunchDate;
                 product.IsAvailable = productData.IsAvailable;
-                product.CatogoryId = productData.CategoryId;
+                product.CatogoryId = catId;
                 product.Description = productData.Description;
 
                 _context.Products.Update(product);
@@ -96,36 +97,38 @@ namespace Experion.MyCart.Controller
 
         // GET: api/Products/----adding product
         [HttpPost]
-        public async Task<ActionResult<Products>> PostProducts([FromBody] ProductModel productsData)
+        public async Task<ActionResult<Products>> PostProducts([FromBody] ProductModel productData)
         {
 
-            var pName = _context.Products.Where(x => x.ProductId == productsData.ProductId).Select(x => x.ProductName).FirstOrDefault();
+            var pName = _context.Products.Where(x => x.ProductId == productData.ProductId).Select(x => x.ProductName).FirstOrDefault();
+            var catId = _context.Catogory.Where(x => x.Catogories == productData.CatogoryName).Select(x => x.CatogoryId).FirstOrDefault();
 
-            
+
             try
             {
                 if (pName != null)
                 {
-                    return NotFound();
+                    return BadRequest();
                 }
-
-                var productAdd = new Products
+                else
                 {
-                    ProductId = productsData.ProductId,
-                    ProductName = productsData.ProductName,
-                    Description = productsData.Description,
-                    Price = productsData.Price,
-                    LaunchDate = productsData.LaunchDate,
-                    PhotoUrl = productsData.PhotoUrl,
-                    IsAvailable = productsData.IsAvailable,
-                    IsDeleted = productsData.IsDeleted,
-                    CatogoryId = productsData.CategoryId
-                };
+                    var productAdd = new Products
+                    {
+                        ProductId = productData.ProductId,
+                        ProductName = productData.ProductName,
+                        Description = productData.Description,
+                        Price = productData.Price,
+                        LaunchDate = productData.LaunchDate,
+                        PhotoUrl = productData.PhotoUrl,
+                        IsAvailable = productData.IsAvailable,
+                        IsDeleted = productData.IsDeleted,
+                        CatogoryId = catId
+                    };
 
-                _context.Products.Add(productAdd);
-                await _context.SaveChangesAsync();
-                return productAdd;
-
+                    _context.Products.Add(productAdd);
+                    await _context.SaveChangesAsync();
+                    return productAdd;
+                }
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -154,7 +157,7 @@ namespace Experion.MyCart.Controller
 
                 return product;
             }
-            catch(DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException)
             {
                 throw;
             }

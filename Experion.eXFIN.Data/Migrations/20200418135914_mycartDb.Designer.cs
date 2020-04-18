@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Experion.MyCart.Data.Migrations
 {
     [DbContext(typeof(MyCartDBContext))]
-    [Migration("20200414152222_mycart")]
-    partial class mycart
+    [Migration("20200418135914_mycartDb")]
+    partial class mycartDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -42,7 +42,27 @@ namespace Experion.MyCart.Data.Migrations
                         new
                         {
                             CatogoryId = 1,
-                            Catogories = "electronics"
+                            Catogories = "Electronics"
+                        },
+                        new
+                        {
+                            CatogoryId = 2,
+                            Catogories = "Footwares"
+                        },
+                        new
+                        {
+                            CatogoryId = 3,
+                            Catogories = "Cloths"
+                        },
+                        new
+                        {
+                            CatogoryId = 4,
+                            Catogories = "Books"
+                        },
+                        new
+                        {
+                            CatogoryId = 5,
+                            Catogories = "Gift Items"
                         });
                 });
 
@@ -66,7 +86,7 @@ namespace Experion.MyCart.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("Id");
 
                     b.ToTable("ProductCart");
                 });
@@ -139,8 +159,6 @@ namespace Experion.MyCart.Data.Migrations
                         .HasMaxLength(50);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CatogoryId");
 
                     b.ToTable("Products");
 
@@ -297,29 +315,6 @@ namespace Experion.MyCart.Data.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Experion.MyCart.Data.Entities.ProductCart", b =>
-                {
-                    b.HasOne("Experion.MyCart.Data.Entities.Products", "IdNavigation")
-                        .WithOne("ProductCart")
-                        .HasForeignKey("Experion.MyCart.Data.Entities.ProductCart", "Id")
-                        .HasConstraintName("FK_ProductCart_Products")
-                        .IsRequired();
-
-                    b.HasOne("Experion.MyCart.Data.Entities.Users", "User")
-                        .WithMany("ProductCart")
-                        .HasForeignKey("UserId")
-                        .HasConstraintName("FK_ProductCart_Users")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Experion.MyCart.Data.Entities.Products", b =>
-                {
-                    b.HasOne("Experion.MyCart.Data.Entities.Catogory", "Catogory")
-                        .WithMany("Products")
-                        .HasForeignKey("CatogoryId")
-                        .HasConstraintName("FK_Products_Catogory");
                 });
 #pragma warning restore 612, 618
         }

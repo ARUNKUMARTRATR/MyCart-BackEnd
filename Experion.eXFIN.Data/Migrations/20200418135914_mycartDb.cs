@@ -2,7 +2,7 @@
 
 namespace Experion.MyCart.Data.Migrations
 {
-    public partial class mycart : Migration
+    public partial class mycartDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -20,6 +20,21 @@ namespace Experion.MyCart.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProductCart",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(nullable: false),
+                    CartProductId = table.Column<string>(maxLength: 50, nullable: false),
+                    ProductCount = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductCart", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProductOrders",
                 columns: table => new
                 {
@@ -32,6 +47,27 @@ namespace Experion.MyCart.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductOrders", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductId = table.Column<string>(maxLength: 50, nullable: false),
+                    ProductName = table.Column<string>(maxLength: 50, nullable: false),
+                    Description = table.Column<string>(maxLength: 50, nullable: true),
+                    Price = table.Column<double>(nullable: false),
+                    LaunchDate = table.Column<string>(maxLength: 20, nullable: true),
+                    Photo_Url = table.Column<string>(maxLength: 100, nullable: true),
+                    IsAvailable = table.Column<bool>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: true),
+                    CatogoryId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -54,64 +90,17 @@ namespace Experion.MyCart.Data.Migrations
                     table.PrimaryKey("PK_Users", x => x.UserId);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Products",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductId = table.Column<string>(maxLength: 50, nullable: false),
-                    ProductName = table.Column<string>(maxLength: 50, nullable: false),
-                    Description = table.Column<string>(maxLength: 50, nullable: true),
-                    Price = table.Column<double>(nullable: false),
-                    LaunchDate = table.Column<string>(maxLength: 20, nullable: true),
-                    Photo_Url = table.Column<string>(maxLength: 100, nullable: true),
-                    IsAvailable = table.Column<bool>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: true),
-                    CatogoryId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Products", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Products_Catogory",
-                        column: x => x.CatogoryId,
-                        principalTable: "Catogory",
-                        principalColumn: "CatogoryId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProductCart",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(nullable: false),
-                    CartProductId = table.Column<string>(maxLength: 50, nullable: false),
-                    ProductCount = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductCart", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ProductCart_Products",
-                        column: x => x.Id,
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ProductCart_Users",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
             migrationBuilder.InsertData(
                 table: "Catogory",
                 columns: new[] { "CatogoryId", "Catogory" },
-                values: new object[] { 1, "electronics" });
+                values: new object[,]
+                {
+                    { 1, "Electronics" },
+                    { 2, "Footwares" },
+                    { 3, "Cloths" },
+                    { 4, "Books" },
+                    { 5, "Gift Items" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Products",
@@ -129,18 +118,16 @@ namespace Experion.MyCart.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductCart_UserId",
+                name: "IX_ProductCart_Id",
                 table: "ProductCart",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Products_CatogoryId",
-                table: "Products",
-                column: "CatogoryId");
+                column: "Id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Catogory");
+
             migrationBuilder.DropTable(
                 name: "ProductCart");
 
@@ -152,9 +139,6 @@ namespace Experion.MyCart.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
-
-            migrationBuilder.DropTable(
-                name: "Catogory");
         }
     }
 }

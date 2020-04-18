@@ -23,12 +23,14 @@ namespace Experion.MyCart.Controller
             try
             {
                 var userData = _context.Users.Where(x => x.Email == value.email).FirstOrDefault();
+
                 if (userData != null)
                 {
                     var productCount = _context.ProductCart.Where(x => x.UserId == userData.UserId).Select(x => x.ProductCount).ToList().Sum();
 
                     var returnUser = new loginModel
                     {
+                        UId = userData.UserId,
                         email = userData.Email,
                         fullName = userData.FullName,
                         photoUrl = userData.PhotoUrl,
@@ -51,17 +53,19 @@ namespace Experion.MyCart.Controller
                     _context.Users.Add(user);
                     _context.SaveChanges();
                     var newUserId = _context.Users.Where(x => x.Email == value.email).Select(x => x.UserId).FirstOrDefault();
+
                     var productCart = new ProductCart
                     {
                         UserId = newUserId,
                         ProductCount = 0,
-                        CartProductId = null
+                        CartProductId = "0"
                     };
                     _context.ProductCart.Add(productCart);
                     _context.SaveChanges();
 
                     var returnUser = new loginModel
                     {
+                        UId = newUserId,
                         email = value.email,
                         fullName = value.fullName,
                         photoUrl = value.photoUrl,

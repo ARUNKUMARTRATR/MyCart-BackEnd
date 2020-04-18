@@ -13,7 +13,5 @@
         public bool? IsDeleted { get; set; }
         public int? CatogoryId { get; set; }
 
-        public virtual Catogory Catogory { get; set; }
-        public virtual ProductCart ProductCart { get; set; }
     }
 }

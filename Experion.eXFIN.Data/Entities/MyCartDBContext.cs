@@ -36,32 +36,42 @@ namespace Experion.MyCart.Data.Entities
                     new Catogory
                     {
                         CatogoryId = 1,
-                        Catogories = "electronics"
-                    }
+                        Catogories = "Electronics"
+                    },
+                     new Catogory
+                     {
+                         CatogoryId = 2,
+                         Catogories = "Footwares"
+                     },
+                      new Catogory
+                      {
+                          CatogoryId = 3,
+                          Catogories = "Cloths"
+                      },
+                       new Catogory
+                       {
+                           CatogoryId = 4,
+                           Catogories = "Books"
+                       },
+                       new Catogory
+                       {
+                           CatogoryId = 5,
+                           Catogories = "Gift Items"
+                       }
                     );
             });
 
             modelBuilder.Entity<ProductCart>(entity =>
             {
 
-                entity.HasIndex(e => e.UserId);
+                entity.HasIndex(e => e.Id);
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.CartProductId)
                     .IsRequired()
                     .HasMaxLength(50);
+                entity.Property(e => e.UserId);
 
-                entity.HasOne(d => d.IdNavigation)
-                    .WithOne(p => p.ProductCart)
-                    .HasForeignKey<ProductCart>(d => d.Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ProductCart_Products");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.ProductCart)
-                    .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ProductCart_Users");
             });
 
             modelBuilder.Entity<ProductOrders>(entity =>
@@ -77,7 +87,7 @@ namespace Experion.MyCart.Data.Entities
 
             modelBuilder.Entity<Products>(entity =>
             {
-                entity.Property(e => e.Description).HasMaxLength(50);
+                entity.Property(e => e.Description).HasMaxLength(1000);
 
                 entity.Property(e => e.LaunchDate).HasMaxLength(20);
 
@@ -93,10 +103,6 @@ namespace Experion.MyCart.Data.Entities
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.HasOne(d => d.Catogory)
-                    .WithMany(p => p.Products)
-                    .HasForeignKey(d => d.CatogoryId)
-                    .HasConstraintName("FK_Products_Catogory");
                 entity.HasData(
                        new Products
                        {

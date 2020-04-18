@@ -6,6 +6,7 @@ namespace Experion.MyCart.Data.Model
 {
     public class loginModel
     {
+        public int UId { get; set; }
         public string email { get; set; }
         public string fName { get; set; }
         public string lName { get; set; }

@@ -27,23 +27,7 @@ namespace Experion.MyCart.Controller
             return await _context.Catogory.ToListAsync();
         }
 
-        // GET: api/Catogories/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Catogory>> GetCatogory(int id)
-        {
-            var catogory = await _context.Catogory.FindAsync(id);
-
-            if (catogory == null)
-            {
-                return NotFound();
-            }
-
-            return catogory;
-        }
-
         // PUT: api/Catogories/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCatogory(int id, Catogory catogory)
         {
@@ -73,9 +57,6 @@ namespace Experion.MyCart.Controller
             return NoContent();
         }
 
-        // POST: api/Catogories
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
         public async Task<ActionResult<Catogory>> PostCatogory(Catogory catogory)
         {

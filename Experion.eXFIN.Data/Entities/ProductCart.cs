@@ -12,7 +12,5 @@ namespace Experion.MyCart.Data.Entities
         public string CartProductId { get; set; }
         public int ProductCount { get; set; }
 
-        public virtual Products IdNavigation { get; set; }
-        public virtual Users User { get; set; }
     }
 }
