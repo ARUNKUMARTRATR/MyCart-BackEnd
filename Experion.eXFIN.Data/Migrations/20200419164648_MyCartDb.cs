@@ -2,7 +2,7 @@
 
 namespace Experion.MyCart.Data.Migrations
 {
-    public partial class mycartDb : Migration
+    public partial class MyCartDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -40,9 +40,18 @@ namespace Experion.MyCart.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductName = table.Column<string>(maxLength: 50, nullable: false),
-                    Price = table.Column<double>(nullable: false),
-                    ProductId = table.Column<string>(maxLength: 50, nullable: false)
+                    TotalPrice = table.Column<double>(nullable: false),
+                    ProductId = table.Column<string>(maxLength: 50, nullable: false),
+                    userId = table.Column<int>(nullable: false),
+                    FName = table.Column<string>(maxLength: 30, nullable: true),
+                    LName = table.Column<string>(maxLength: 30, nullable: true),
+                    Dob = table.Column<string>(nullable: true),
+                    Add1 = table.Column<string>(nullable: true),
+                    Add2 = table.Column<string>(nullable: true),
+                    State = table.Column<string>(nullable: true),
+                    Mobile = table.Column<string>(maxLength: 20, nullable: true),
+                    ZipCode = table.Column<int>(maxLength: 10, nullable: false),
+                    Terms = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -57,7 +66,7 @@ namespace Experion.MyCart.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProductId = table.Column<string>(maxLength: 50, nullable: false),
                     ProductName = table.Column<string>(maxLength: 50, nullable: false),
-                    Description = table.Column<string>(maxLength: 50, nullable: true),
+                    Description = table.Column<string>(maxLength: 1000, nullable: true),
                     Price = table.Column<double>(nullable: false),
                     LaunchDate = table.Column<string>(maxLength: 20, nullable: true),
                     Photo_Url = table.Column<string>(maxLength: 100, nullable: true),

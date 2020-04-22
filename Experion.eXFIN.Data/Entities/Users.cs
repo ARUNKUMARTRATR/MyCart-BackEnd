@@ -5,8 +5,6 @@ namespace Experion.MyCart.Data.Entities
 {
     public partial class Users
     {
-       
-
         public int UserId { get; set; }
         public string FName { get; set; }
         public string LName { get; set; }

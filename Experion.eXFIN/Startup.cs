@@ -72,7 +72,7 @@ namespace Experion.eXFIN
                 {
                     Version = "v1",
                     Title = "MyCart API",
-                    Description = "Contains list of all the APIs used in eXFIN",
+                    Description = "Contains list of all the APIs used in MyCart",
                     
                 });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -123,7 +123,7 @@ namespace Experion.eXFIN
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", " eXFIN API V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "MyCart API V1");
             });
             app.UseRouting();
             app.UseCors("MyPolicy");

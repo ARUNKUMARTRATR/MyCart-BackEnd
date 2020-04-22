@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Experion.MyCart.Data.Migrations
 {
     [DbContext(typeof(MyCartDBContext))]
-    [Migration("20200418135914_mycartDb")]
-    partial class mycartDb
+    [Migration("20200419164648_MyCartDb")]
+    partial class MyCartDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -98,18 +98,47 @@ namespace Experion.MyCart.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.Property<string>("Add1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Add2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Dob")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FName")
+                        .HasColumnType("nvarchar(30)")
+                        .HasMaxLength(30);
+
+                    b.Property<string>("LName")
+                        .HasColumnType("nvarchar(30)")
+                        .HasMaxLength(30);
+
+                    b.Property<string>("Mobile")
+                        .HasColumnType("nvarchar(20)")
+                        .HasMaxLength(20);
 
                     b.Property<string>("ProductId")
                         .IsRequired()
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<string>("ProductName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Terms")
+                        .HasColumnType("bit");
+
+                    b.Property<double>("TotalPrice")
+                        .HasColumnType("float");
+
+                    b.Property<int>("ZipCode")
+                        .HasColumnType("int")
+                        .HasMaxLength(10);
+
+                    b.Property<int>("userId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -127,8 +156,8 @@ namespace Experion.MyCart.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("nvarchar(1000)")
+                        .HasMaxLength(1000);
 
                     b.Property<bool?>("IsAvailable")
                         .HasColumnType("bit");

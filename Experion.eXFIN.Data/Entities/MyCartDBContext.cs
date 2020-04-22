@@ -80,9 +80,18 @@ namespace Experion.MyCart.Data.Entities
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.ProductName)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.FName).HasMaxLength(30);
+
+                entity.Property(e => e.LName).HasMaxLength(30);
+
+                entity.Property(e => e.Mobile).HasMaxLength(20);
+
+                entity.Property(e => e.ZipCode).HasMaxLength(10);
+
+                entity.Property(e => e.ZipCode);
+                entity.Property(e => e.TotalPrice);
+                entity.Property(e => e.Terms);
+
             });
 
             modelBuilder.Entity<Products>(entity =>

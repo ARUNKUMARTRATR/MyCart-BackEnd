@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Experion.MyCart.Data.Entities;
+using Experion.MyCart.Data.Model;
 
 namespace Experion.MyCart.Controller
 {
@@ -22,9 +23,20 @@ namespace Experion.MyCart.Controller
 
         // GET: api/ProductOrders
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductOrders>>> GetProductOrders()
+        public  List<Products> GetProductOrders()
         {
-            return await _context.ProductOrders.ToListAsync();
+            var Porders = _context.ProductOrders.ToList();
+            var PorderIds = Porders.Select(x => x.ProductId).ToList();
+            var oproducts = _context.Products.Where(x=> PorderIds.Contains(x.ProductId)).ToList();
+            return oproducts;
+        }
+        [HttpGet("profile")]
+        public List<Products> GetProfile()
+        {
+            var Porders = _context.ProductOrders.ToList();
+            var PorderIds = Porders.Select(x => x.ProductId).ToList();
+            var oproducts = _context.Products.Where(x => PorderIds.Contains(x.ProductId)).ToList();
+            return oproducts;
         }
 
         // GET: api/ProductOrders/5
@@ -85,6 +97,11 @@ namespace Experion.MyCart.Controller
             return CreatedAtAction("GetProductOrders", new { id = productOrders.Id }, productOrders);
         }
 
+        [HttpPost("orders")]
+        public  Task<ActionResult<ProductOrders>> GetOrders(ProductOrders productOrders)
+        {
+            return null;
+        }
         // DELETE: api/ProductOrders/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<ProductOrders>> DeleteProductOrders(int id)
