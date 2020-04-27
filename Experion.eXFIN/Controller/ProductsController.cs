@@ -28,7 +28,8 @@ namespace Experion.MyCart.Controller
         {
             try
             {
-                return await _context.Products.Where(x => x.IsDeleted != true).ToListAsync();
+                var products = await _context.Products.Where(x => x.IsDeleted != true).ToListAsync();
+                return products;
             }
             catch (DbUpdateConcurrencyException)
             {

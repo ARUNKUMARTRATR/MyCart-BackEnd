@@ -83,8 +83,7 @@ namespace Experion.MyCart.Controller
             }
         }
 
-        // DELETE: api/ProductCarts/5
-        [HttpPost]
+        [HttpPost("remove")]
         public async Task<ActionResult<ProductCart>> DeleteProductCart(ProductCart productCart)
         {
             var Id = _context.ProductCart.Where(x => x.UserId == productCart.UserId && x.CartProductId == productCart.CartProductId).Select(x => x.Id).FirstOrDefault();
